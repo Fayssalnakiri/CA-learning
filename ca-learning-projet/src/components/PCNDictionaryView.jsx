@@ -24,7 +24,7 @@ export const PCNDictionaryView = () => {
           </div>
           <h1 className="text-2xl sm:text-4xl font-black">Comptes de l'SCF</h1>
           <p className="text-sm text-emerald-100 mt-2 max-w-2xl">
-            Recherchez rapidement un compte par son numéro (ex: 512) ou par son intitulé (ex: Banque) selon le Plan Comptable National.
+            Recherchez rapidement un compte par son numéro (ex: 512) ou par son intitulé (ex: Banque) selon le Système Comptable Financier.
           </p>
         </div>
       </div>

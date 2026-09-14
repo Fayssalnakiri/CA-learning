@@ -152,7 +152,7 @@ export const SimulatorView = () => {
           }`}
         >
           <Scale className="w-4 h-4" />
-          <span>Plan Comptable (PCN 7 Classes)</span>
+          <span>Système Comptable (SCF 7 Classes)</span>
         </button>
       </div>
 
@@ -376,7 +376,7 @@ export const SimulatorView = () => {
         <div className="bg-white dark:bg-emerald-950/40 p-5 rounded-3xl border border-slate-200 dark:border-emerald-900/60 space-y-4">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
             <h3 className="font-black text-sm text-slate-800 dark:text-slate-100">
-              Nomenclature des 7 Classes du Plan Comptable National (SCF)
+              Nomenclature des 7 Classes du Système Comptable Financier (SCF)
             </h3>
 
             <div className="relative w-full sm:w-64">

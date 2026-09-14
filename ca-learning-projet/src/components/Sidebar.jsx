@@ -20,7 +20,7 @@ export const Sidebar = ({ currentTab, onTabChange }) => {
 
   const navItems = [
     { id: 'dashboard', label: 'Apprendre', icon: BookOpen, badge: null },
-    { id: 'pcn', label: 'Comptes de l\'SCF', icon: Calculator, badge: 'PCN' },
+    { id: 'pcn', label: 'Comptes de l\'SCF', icon: Calculator, badge: 'SCF' },
     { id: 'summaries', label: 'Résumés des cours', icon: Book, badge: 'Nouveau' },
     { id: 'leaderboard', label: 'Classement', icon: Users, badge: 'TOP 10' },
     { id: 'badges', label: 'Succès & Badges', icon: Award, badge: null },

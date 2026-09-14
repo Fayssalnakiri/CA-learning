@@ -81,7 +81,7 @@ export const LessonQuizModal = ({ lesson, onExit }) => {
   };
 
   const handleNext = () => {
-    if (currentIndex + 1 < exercises.length) {
+    if (currentIndex + 1 < exercises.length && !isFinished) {
       setCurrentIndex((prev) => prev + 1);
       setSelectedOptionId(null);
       setTrueFalseAnswer(null);
@@ -89,22 +89,36 @@ export const LessonQuizModal = ({ lesson, onExit }) => {
       setDebitAmount('');
       setCreditAmount('');
       setStepState('answering');
-    } else {
-      // Quiz Finished
+    } else if (!lesson.isInfinite) {
+      // Regular Quiz Finished
       const finalScore = Math.round(((correctCount + (stepState === 'correct' ? 1 : 0)) / exercises.length) * 100);
       dataService.completeLesson(lesson.id, finalScore, 25);
       audioService.playSuccess();
+      setIsFinished(true);
+    } else {
+      // Infinite mode hit the 500 cap
       setIsFinished(true);
     }
   };
 
   if (isFinished) {
-    const finalScore = Math.round((correctCount / exercises.length) * 100);
+    let finalScore = 0;
+    let totalQ = exercises.length;
+    let xp = 25;
+    
+    if (lesson.isInfinite) {
+      totalQ = currentIndex;
+      finalScore = totalQ > 0 ? Math.round((correctCount / totalQ) * 100) : 0;
+      xp = correctCount * 5; // 5 XP per correct answer in infinite mode
+    } else {
+      finalScore = Math.round((correctCount / exercises.length) * 100);
+    }
+
     return (
       <QuizResultModal
         score={finalScore}
-        xpEarned={25}
-        totalQuestions={exercises.length}
+        xpEarned={xp}
+        totalQuestions={totalQ}
         correctCount={correctCount}
         onContinue={onExit}
       />
@@ -141,15 +155,25 @@ export const LessonQuizModal = ({ lesson, onExit }) => {
 
         {/* Progress Bar */}
         <div className="flex-1 max-w-xl flex items-center gap-3">
-          <div className="flex-1 h-3 bg-slate-100 dark:bg-emerald-950 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-300"
-              style={{ width: `${progressPercent}%` }}
-            />
-          </div>
-          <span className="text-xs font-black text-emerald-600 dark:text-emerald-300">
-            {currentIndex + 1} / {exercises.length}
-          </span>
+          {lesson.isInfinite ? (
+            <div className="flex-1 flex justify-center">
+              <span className="text-xs font-black text-emerald-600 dark:text-emerald-300 bg-emerald-500/10 px-4 py-1.5 rounded-xl border border-emerald-500/20">
+                Score : {correctCount} / {currentIndex}
+              </span>
+            </div>
+          ) : (
+            <>
+              <div className="flex-1 h-3 bg-slate-100 dark:bg-emerald-950 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-300"
+                  style={{ width: `${progressPercent}%` }}
+                />
+              </div>
+              <span className="text-xs font-black text-emerald-600 dark:text-emerald-300">
+                {currentIndex + 1} / {exercises.length}
+              </span>
+            </>
+          )}
         </div>
 
         <div className="flex items-center gap-1 text-amber-500 font-black text-xs bg-amber-500/10 px-3 py-1.5 rounded-xl border border-amber-500/20">

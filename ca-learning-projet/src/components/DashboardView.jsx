@@ -18,6 +18,7 @@ import {
 
 export const DashboardView = ({ modules, onStartLesson, searchQuery, onNavigateTab }) => {
   const [activeModuleTab, setActiveModuleTab] = useState('mod-scf');
+  const [showTimeSelector, setShowTimeSelector] = useState(false);
   const { profile } = useAuth();
 
   const moduleCategories = [
@@ -42,20 +43,21 @@ export const DashboardView = ({ modules, onStartLesson, searchQuery, onNavigateT
     return null;
   }).filter(Boolean);
 
-  const startTimedTest = () => {
-    // Generate 10 random questions from current module
+  const startTimedTest = (minutes) => {
     const allExercises = chapters.flatMap(chap => chap.lessons?.flatMap(l => l.exercises || []) || []);
     const shuffled = [...allExercises].sort(() => 0.5 - Math.random());
-    const selected = shuffled.slice(0, 10);
+    const selected = shuffled.slice(0, 500); // Plenty for infinite mode
     
     onStartLesson({
       id: 'timed_test_' + Date.now(),
-      title: 'Test Chronométré',
-      content: 'Ce test est chronométré. Vous avez 5 minutes pour répondre à 10 questions aléatoires.',
+      title: 'Test Chronométré Infini',
+      content: `Mode infini : répondez à un maximum de questions en ${minutes} minute${minutes > 1 ? 's' : ''}.`,
       exercises: selected,
       isTimed: true,
-      timeLimit: 300 // 5 minutes
+      timeLimit: minutes * 60,
+      isInfinite: true
     });
+    setShowTimeSelector(false);
   };
 
   return (
@@ -122,13 +124,24 @@ export const DashboardView = ({ modules, onStartLesson, searchQuery, onNavigateT
             );
           })}
         </div>
-        <button
-          onClick={startTimedTest}
-          className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-rose-500 hover:bg-rose-600 text-white font-black text-xs transition-colors shadow-lg shadow-rose-500/30 shrink-0"
-        >
-          <Clock className="w-4 h-4" />
-          Test Chronométré
-        </button>
+        <div className="relative">
+          {showTimeSelector ? (
+            <div className="flex items-center gap-2 bg-rose-100 dark:bg-rose-950/40 p-1.5 rounded-2xl border border-rose-200 dark:border-rose-900/50">
+              <button onClick={() => startTimedTest(1)} className="px-4 py-2 bg-white dark:bg-rose-900 text-rose-600 dark:text-rose-200 text-[10px] font-black rounded-xl hover:bg-rose-50 dark:hover:bg-rose-800 transition-colors">1 MIN</button>
+              <button onClick={() => startTimedTest(3)} className="px-4 py-2 bg-white dark:bg-rose-900 text-rose-600 dark:text-rose-200 text-[10px] font-black rounded-xl hover:bg-rose-50 dark:hover:bg-rose-800 transition-colors">3 MIN</button>
+              <button onClick={() => startTimedTest(5)} className="px-4 py-2 bg-white dark:bg-rose-900 text-rose-600 dark:text-rose-200 text-[10px] font-black rounded-xl hover:bg-rose-50 dark:hover:bg-rose-800 transition-colors">5 MIN</button>
+              <button onClick={() => setShowTimeSelector(false)} className="p-2 text-rose-400 hover:text-rose-600">✕</button>
+            </div>
+          ) : (
+            <button
+              onClick={() => setShowTimeSelector(true)}
+              className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-rose-500 hover:bg-rose-600 text-white font-black text-xs transition-colors shadow-lg shadow-rose-500/30 shrink-0"
+            >
+              <Clock className="w-4 h-4" />
+              Test Chronométré
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Chapters & Lessons Accordion List */}
