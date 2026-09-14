@@ -36,8 +36,6 @@ export const AuthProvider = ({ children }) => {
       institution: "Université d'Alger",
       field_of_study: 'Comptabilité',
       role: 'student',
-      isPremium: false,
-      lessonsStartedToday: 0,
       lastActiveDate: new Date().toISOString().split('T')[0],
       level: 1,
       xp: 0,

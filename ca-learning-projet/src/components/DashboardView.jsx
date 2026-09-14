@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { AdBanner } from './AdBanner';
 import { 
   BookOpen, 
   CheckCircle, 
@@ -94,8 +93,6 @@ export const DashboardView = ({ modules, onStartLesson, searchQuery, onNavigateT
           </div>
         </div>
       </div>
-
-      {!profile?.isPremium && <AdBanner position="content" />}
 
       {/* Module Selector Tabs and Timed Test Button */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-emerald-900/20 dark:border-emerald-800/40 pb-3">

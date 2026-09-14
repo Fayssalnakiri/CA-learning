@@ -1,6 +1,5 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
-import { AdBanner } from './AdBanner';
 import { 
   BookOpen, 
   Calculator, 
@@ -87,8 +86,6 @@ export const Sidebar = ({ currentTab, onTabChange }) => {
           {(200 - (profile.xp % 200))} XP restants pour le Niveau suivant
         </p>
       </div>
-
-      {!profile.isPremium && <AdBanner position="sidebar" />}
     </aside>
   );
 };
